@@ -47,59 +47,58 @@ const upload = multer({ storage });
 
 // Agora você pode usar o middleware `upload` em sua rota
 router.put('/:id/foto-perfil', upload.single('fotoPerfil'), async (req, res) => {
-  try {
-    const { id } = req.params;
-    if (!req.file) {
-      return res.status(400).json({ success: false, message: 'Nenhuma imagem enviada.' });
+    try {
+      const { id } = req.params;
+      if (!req.file) {
+        return res.status(400).json({ success: false, message: 'Nenhuma imagem enviada.' });
+      }
+  
+      const atleta = await Athlete.findById(id);
+      if (!atleta) {
+        return res.status(404).json({ success: false, message: 'Atleta não encontrado.' });
+      }
+  
+      // Enviar a imagem para o Cloudinary
+      console.log('Enviando imagem para o Cloudinary...', req.file.path);
+      const result = await uploadImage(req.file.path, `${id}-foto-perfil`);
+  
+      // Atualiza a URL da imagem no banco de dados do atleta
+      atleta.fotoPerfil = result.secure_url;
+      await atleta.save();
+  
+      console.log('Rankings encontrados:', atleta.rankingCorrespondente);
+      const ranking = await rankingSchema.findById(atleta.rankingCorrespondente);
+  
+      if (ranking) {
+        console.log('Ranking encontrado:', ranking);
+  
+        if (!ranking.players || !Array.isArray(ranking.players)) {
+          console.warn(`O ranking ${ranking._id} não tem jogadores ou o campo players não é um array.`);
+        } else {
+          const aluno = ranking.players.find(aluno => aluno.athlete.toString() === id);
+  
+          if (aluno) {
+            aluno.fotoPerfil = result.secure_url;
+            await ranking.save();
+            console.log(`Foto de perfil atualizada para o atleta ${id} no ranking ${ranking._id}`);
+          } else {
+            console.warn(`Atleta ${id} não encontrado no ranking ${ranking._id}`);
+          }
+        }
+      } else {
+        console.warn(`Ranking não encontrado para o atleta com ID ${id}. Apenas a foto do atleta foi atualizada.`);
+      }
+  
+      // Responde com a URL da imagem armazenada no Cloudinary
+      res.status(200).json({
+        success: true,
+        message: 'Foto de perfil atualizada com sucesso! (Ranking atualizado se aplicável)',
+        fotoPerfil: atleta.fotoPerfil,
+      });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ success: false, message: 'Erro ao atualizar foto de perfil.', error: error.message });
     }
-
-    const atleta = await Athlete.findById(id);
-    if (!atleta) {
-      return res.status(404).json({ success: false, message: 'Atleta não encontrado.' });
-    }
-
-    // Enviar a imagem para o Cloudinary
-    console.log('Enviando imagem para o Cloudinary...', req.file.path);
-    const result = await uploadImage(req.file.path, `${id}-foto-perfil`);
-
-    // Atualiza a URL da imagem no banco de dados
-    atleta.fotoPerfil = result.secure_url;
-    console.log('Rankings encontrados:', atleta.rankingCorrespondente);
-    const ranking = await rankingSchema.findById(atleta.rankingCorrespondente);
-
-    if (!ranking) {
-    console.error(`Ranking não encontrado para o atleta com ID ${id}.`);
-    return;
-    }
-
-    console.log('Ranking encontrado:', ranking);
-
-    if (!ranking.players || !Array.isArray(ranking.players)) {
-    console.warn(`O ranking ${ranking._id} não tem alunos ou o campo alunos não é um array.`);
-    return;
-    }
-
-    const aluno = ranking.players.find(aluno => aluno.athlete.toString() === id);
-
-    if (aluno) {
-    aluno.fotoPerfil = result.secure_url;
-    await ranking.save();
-    console.log(`Foto de perfil atualizada para o atleta ${id} no ranking ${ranking._id}`);
-    } else {
-    console.warn(`Atleta ${id} não encontrado no ranking ${ranking._id}`);
-    }
-    await atleta.save();
-
-    // Responde com a URL da imagem armazenada no Cloudinary
-    res.status(200).json({
-      success: true,
-      message: 'Foto de perfil atualizada com sucesso!',
-      fotoPerfil: atleta.fotoPerfil,
-    });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ success: false, message: 'Erro ao atualizar foto de perfil.', error: error.message });
-  }
 });
 
 // Rota para deletar a foto de perfil do atleta
