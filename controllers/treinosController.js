@@ -86,11 +86,6 @@ exports.criarTreino = async (req, res) => {
     }
   });
 };
-
-
-
-
-// Função para alterar um treino
 exports.alterarTreino = async (req, res) => {
   const { id } = req.params; // ID do treino a ser alterado
   const atualizacoes = req.body; // Dados enviados no corpo da requisição
@@ -170,35 +165,34 @@ exports.buscarTreino = async (req, res) => {
 };
 
 // Função para deletar um treino pelo IDexports.deletarTreino = async (req, res) => {
-  exports.deletarTreino = async (req, res) => {
-    try {
-      console.log('Função para deletar um treino pelo ID');
-      const { treinoId } = req.params; // Captura o ID da URL
-  
-      // Deleta o treino no banco de dados pelo ID
-      const treinoDeletado = await Treino.findByIdAndDelete(treinoId);
-  
-      if (!treinoDeletado) {
-        return res.status(404).json({ message: 'Treino não encontrado' });
-      }
-  
-      // Remove o treino dos arrays de treinosPendentes e treinosConcluidos de todos os atletas
-      await Athlete.updateMany(
-        {}, // Aplica a todos os documentos
-        {
-          $pull: {
-            treinosPendentes: treinoId,
-            treinosConcluidos: treinoId,
-          },
-        }
-      );
-  
-      console.log(`Treino com ID ${treinoId} deletado e removido de todos os atletas`);
-      res.status(200).json({ message: 'Treino deletado com sucesso' });
-    } catch (error) {
-      console.error('Erro ao deletar treino:', error);
-      res.status(500).json({ message: 'Erro ao deletar treino', error });
+exports.deletarTreino = async (req, res) => {
+  try {
+    console.log('Função para deletar um treino pelo ID');
+    const { treinoId } = req.params; // Captura o ID da URL
+
+    // Deleta o treino no banco de dados pelo ID
+    const treinoDeletado = await Treino.findByIdAndDelete(treinoId);
+
+    if (!treinoDeletado) {
+      return res.status(404).json({ message: 'Treino não encontrado' });
     }
-  };
-  
+
+    // Remove o treino dos arrays de treinosPendentes e treinosConcluidos de todos os atletas
+    await Athlete.updateMany(
+      {}, // Aplica a todos os documentos
+      {
+        $pull: {
+          treinosPendentes: treinoId,
+          treinosConcluidos: treinoId,
+        },
+      }
+    );
+
+    console.log(`Treino com ID ${treinoId} deletado e removido de todos os atletas`);
+    res.status(200).json({ message: 'Treino deletado com sucesso' });
+  } catch (error) {
+    console.error('Erro ao deletar treino:', error);
+    res.status(500).json({ message: 'Erro ao deletar treino', error });
+  }
+};
 
