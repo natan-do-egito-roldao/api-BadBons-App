@@ -128,3 +128,25 @@ exports.deletarTreino = async (req, res) => {
     res.status(500).json({ message: 'Erro ao deletar treino', error });
   }
 };
+
+exports.alterarTreino = async (req, res) => {
+  console.log('🔄 Atualizando treino...');
+  const { id } = req.params;
+  console.log(`📌 ID do treino: ${id}`);
+  const atualizacoes = req.body;
+  console.log(`✏️ Novos dados:`, atualizacoes);
+  
+  try {
+    const treinoAtualizado = await Treino.findByIdAndUpdate(id, atualizacoes, { new: true });
+    if (!treinoAtualizado) {
+      console.warn('⚠️ Treino não encontrado');
+      return res.status(404).json({ message: 'Treino não encontrado' });
+    }
+    console.log('✅ Treino atualizado com sucesso', treinoAtualizado);
+    res.status(200).json({ message: 'Treino atualizado com sucesso', treino: treinoAtualizado });
+  } catch (error) {
+    console.error('❌ Erro ao atualizar treino:', error);
+    res.status(500).json({ message: 'Erro ao atualizar treino', error });
+  }
+};
+
