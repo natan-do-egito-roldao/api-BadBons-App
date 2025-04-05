@@ -75,6 +75,7 @@ router.get('/buscar-ranking-id', async (req, res) => {
       nome: player.nome,
       pontos: player.points,  // Supondo que você queira os pontos do jogador também
       rank: player.rank,  // Se houver um campo 'rank'
+      exatoRanking: ranking
     }));
 
     console.log('Jogadores do ranking formatados:', jogadoresFormatados);

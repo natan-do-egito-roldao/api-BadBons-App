@@ -208,8 +208,6 @@ router.get('/:id/treinos-detalhados', async (req, res) => {
             tipo: tc.treinoId.tipo,
             fotoTreino: tc.treinoId.fotoTreino
         }));
-
-      console.log('ATE AQUI')
   
       return res.status(200).json({
         success: true,
