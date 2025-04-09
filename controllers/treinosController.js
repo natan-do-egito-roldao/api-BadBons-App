@@ -78,9 +78,11 @@ exports.criarTreino = async (req, res) => {
 
 // Buscar treinos com filtros
 exports.buscarTreinos = async (req, res) => {
-  console.log('🔍 Buscando treinos...');
+  console.log('🔍 Buscando treinos com nome:', req.body.nome);
   try {
-    const treinos = await Treino.find(req.body);
+    const treinos = await Treino.find({
+      nome: { $regex: req.body.nome, $options: 'i' },
+    });
     console.log(`✅ ${treinos.length} treinos encontrados`);
     res.status(200).json(treinos);
   } catch (error) {
@@ -88,6 +90,7 @@ exports.buscarTreinos = async (req, res) => {
     res.status(500).json({ message: 'Erro ao buscar os treinos', error });
   }
 };
+
 
 // Buscar um treino pelo ID
 exports.buscarTreino = async (req, res) => {
