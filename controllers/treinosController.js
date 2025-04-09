@@ -91,6 +91,7 @@ exports.buscarTreinos = async (req, res) => {
 
 // Buscar um treino pelo ID
 exports.buscarTreino = async (req, res) => {
+  console.log('🔍----------------------------------------------🔍');
   console.log('🔍 Buscando treino específico...');
   const { treinoId } = req.params;
   console.log(`📌 ID do treino: ${treinoId}`);
@@ -98,12 +99,15 @@ exports.buscarTreino = async (req, res) => {
     const treino = await Treino.findById(treinoId);
     if (!treino) {
       console.warn('⚠️ Treino não encontrado');
+      console.log('⚠️----------------------------------------------⚠️');
       return res.status(404).json({ message: 'Treino não encontrado' });
     }
     console.log('✅ Treino encontrado:', treino);
+    console.log('✅----------------------------------------------✅');
     res.status(200).json(treino);
   } catch (error) {
     console.error('❌ Erro ao buscar treino:', error);
+    console.log('❌----------------------------------------------❌');
     res.status(500).json({ message: 'Erro ao buscar treino', error });
   }
 };
@@ -148,5 +152,5 @@ exports.alterarTreino = async (req, res) => {
     console.error('❌ Erro ao atualizar treino:', error);
     res.status(500).json({ message: 'Erro ao atualizar treino', error });
   }
-};
+}; 
 
