@@ -134,38 +134,63 @@ router.delete('/:id/foto-perfil', async (req, res) => {
 // Rota para solicitar a prova caso não tenha treinos pendentes
 router.post('/:id/solicitar-prova', async (req, res) => {
     try {
-        console.log('Solicitando prova...');
         const { id } = req.params;
 
+        console.log('\n================= 📩 INICIANDO SOLICITAÇÃO DE PROVA =================');
+        console.log(`📌 ID recebido: ${id}`);
+
         if (!mongoose.Types.ObjectId.isValid(id)) {
+            console.warn('⚠️ ID inválido recebido.');
             return res.status(400).json({ success: false, message: 'ID inválido.' });
         }
 
+        console.log('🔎 Buscando atleta no banco de dados...');
         const atleta = await Athlete.findById(id);
+
         if (!atleta) {
+            console.warn('❌ Atleta não encontrado.');
             return res.status(404).json({ success: false, message: 'Atleta não encontrado.' });
         }
-        console.log(atleta);
+
+        console.log(`✅ Atleta encontrado: ${atleta.nome || atleta._id}`);
+        console.log(`📋 Treinos pendentes: ${atleta.treinosPendentes.length}`);
+
         if (atleta.treinosPendentes.length === 0) {
+            console.log('🎯 Nenhum treino pendente. Atualizando status para "Aguardando Prova"...');
             atleta.statusNivel = 'Aguardando Prova';
             await atleta.save();
+
+            console.log('✅ Status atualizado com sucesso.');
+            console.log('=====================================================================\n');
+
             return res.status(200).json({
                 success: true,
                 message: 'Solicitação de prova registrada com sucesso.',
                 status: atleta.statusNivel
             });
-            console
+
         } else {
+            console.warn('⛔ Atleta ainda possui treinos pendentes. Solicitação negada.');
+            console.log('=====================================================================\n');
+
             return res.status(400).json({
                 success: false,
                 message: 'Você ainda tem treinos pendentes. Não pode solicitar a prova.'
             });
         }
+
     } catch (error) {
-        console.error(error);
-        return res.status(500).json({ success: false, message: 'Erro ao solicitar prova.', error: error.message });
+        console.error('💥 Erro ao solicitar prova:', error);
+        console.log('=====================================================================\n');
+
+        return res.status(500).json({
+            success: false,
+            message: 'Erro ao solicitar prova.',
+            error: error.message
+        });
     }
 });
+
 
 // Rota para obter detalhes dos treinos de um atleta
 router.get('/:id/treinos-detalhados', async (req, res) => {

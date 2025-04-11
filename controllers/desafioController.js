@@ -157,54 +157,60 @@ exports.obterTodosDesafios = async (req, res) => {
 // Função para declarar conclusão de desafio e adicionar pontos ao atleta
 exports.concluirDesafio = async (req, res) => {
   try {
-      const { desafiosId, atletaId } = req.body;
+    const { desafiosId, atletaId } = req.body;
 
-      // Verificar se o id do atleta foi encontrado
-      if (!atletaId) {
-          return res.status(400).json({ success: false, message: 'ID do atleta não encontrado.' });
-      }
+    if (!atletaId) {
+      return res.status(400).json({ success: false, message: 'ID do atleta não encontrado.' });
+    }
 
-      // Encontrar o desafio correspondente
-      const desafio = await Desafio.findById(desafiosId);
-      if (!desafio) {
-          return res.status(404).json({ success: false, message: 'Desafio não encontrado' });
-      }
+    const desafio = await Desafio.findById(desafiosId);
+    if (!desafio) {
+      return res.status(404).json({ success: false, message: 'Desafio não encontrado' });
+    }
 
-      // Encontrar o atleta correspondente
-      const atleta = await Athlete.findById(atletaId);
-      if (!atleta) {
-          return res.status(404).json({ success: false, message: 'Atleta não encontrado' });
-      }
+    const atleta = await Athlete.findById(atletaId);
+    if (!atleta) {
+      return res.status(404).json({ success: false, message: 'Atleta não encontrado' });
+    }
 
-      // Verifica se o desafio já foi concluído
-      const desafioConcluido = atleta.desafiosConcluidos.some(d => d.desafioId.toString() === desafiosId);
-      if (desafioConcluido) {
-          return res.status(400).json({ message: 'Desafio já concluído.' });
-      }
+    const desafioConcluido = atleta.desafiosConcluidos.some(
+      (d) => d.desafioId.toString() === desafiosId
+    );
 
-      // Adiciona o desafio concluído ao atleta com a data de conclusão
-      atleta.desafiosConcluidos.push({
-        desafioId: new mongoose.Types.ObjectId(desafiosId),
-        dataConclusao: new Date(),
+    if (desafioConcluido) {
+      return res.status(400).json({
+        success: false,
+        message: 'Desafio já concluído.',
+        concluido: true, // ← Aqui está o que você precisa
       });
-      console.log('desafios concluido', atleta.desafiosConcluidos);
+    }
 
-      // Adiciona +1 ao contador de conclusões do desafio
-      desafio.quantidadeConclusao += 1;
+    atleta.desafiosConcluidos.push({
+      desafioId: new mongoose.Types.ObjectId(desafiosId),
+      dataConclusao: new Date(),
+    });
 
-      // Salvar as atualizações no atleta e no desafio
-      await atleta.save();
-      await desafio.save();
+    desafio.quantidadeConclusao += 1;
 
-      res.json({
-          success: true,
-          message: 'Desafio concluído com sucesso e adicionado à lista.'
-      });
+    await atleta.save();
+    await desafio.save();
+
+    res.json({
+      success: true,
+      message: 'Desafio concluído com sucesso e adicionado à lista.',
+      concluido: true, // também pode retornar isso aqui
+    });
   } catch (error) {
-      console.error(error);
-      res.status(500).json({ success: false, message: 'Erro ao concluir o desafio.', error: error.message });
+    console.error(error);
+    res.status(500).json({
+      success: false,
+      message: 'Erro ao concluir o desafio.',
+      error: error.message,
+    });
   }
 };
+
+
 exports.deletarDesafio = async (req, res) => {
   console.log('ENTROU NA ROTA');
   console.log('ID recebido:', req.params.id); // Verifica o ID recebido
