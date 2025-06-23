@@ -8,8 +8,6 @@ const router = express.Router();
 // Rota de login do administrador
 router.post('/admin-login', async (req, res) => {
     const { email, password } = req.body;
-    printf('Admin login attempt with email: %s', email);
-    printf('Admin login attempt with password: %s', password);
 
     // Verifica se o email e a senha são iguais aos definidos para o admin
     if (email === process.env.ADMIN_EMAIL && password === process.env.ADMIN_PASSWORD) {
