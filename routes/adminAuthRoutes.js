@@ -1,7 +1,7 @@
 // backend/routes/adminAuthRoutes.js
 const express = require('express');
 const jwt = require('jsonwebtoken');
-require('dotenv').config();
+require('dotenv').config({ path: '/etc/secrets/.env' });
 
 const router = express.Router();
 
