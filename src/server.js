@@ -23,11 +23,11 @@ app.get('/ping', (req, res) => {
   res.status(200).json({ message: 'pong' });
 });
 
-app.listen(PORT, () => {
-  console.log(`🚀 Servidor rodando na porta ${PORT}`);
-});
 // Conexão e inicialização
 connectDB().then(() => {
+  app.listen(PORT, () => {
+    console.log(`🚀 Servidor rodando na porta ${PORT}`);
+  });
 }).catch((err) => {
   console.error('Erro ao conectar com o banco:', err);
 });
