@@ -16,6 +16,12 @@ const athleteModel = new mongoose.Schema({
         required: [true, 'Idade é obrigatória'],
         min: [1, 'Idade deve ser maior que 0'], // Validação para garantir que a idade seja positiva
     },
+    cpf: {
+        type: String,
+        required: [true, 'CPF é obrigatório'],
+        unique: true, // Validação para garantir que o CPF seja único
+        match: [/^\d{11}$/, 'Por favor, insira um CPF válido com 11 dígitos'], // Validação de formato de CPF
+    },
     email: {
         type: String,
         required: [true, 'Email é obrigatório'],
