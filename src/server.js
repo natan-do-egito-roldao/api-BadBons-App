@@ -16,7 +16,7 @@ app.use(express.json());
 // Rotas
 app.use('/api/auth', Athlete);
 app.use('/api/admin/athlete', athleteAdminRoutes);
-app.use('/api/admin/unit', unitAdminRoutes);
+app.use('/api/unit', unitAdminRoutes);
 
 // Teste de rota
 app.get('/ping', (req, res) => {
