@@ -28,6 +28,10 @@ const athleteModel = new mongoose.Schema({
         unique: true, // Validação para garantir que o email seja único
         match: [/^\S+@\S+\.\S+$/, 'Por favor, insira um email válido'], // Validação de formato de email
     },
+    dataNascimento: {
+        type: Date,
+        required: [true, 'Data de nascimento é obrigatória'],
+    },
     telefone: {
         type: String,
         required: [true, 'Telefone é obrigatório'],
