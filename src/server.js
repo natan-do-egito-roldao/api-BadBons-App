@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 import Athlete from './routes/auth.routes.js';
 import athleteAdminRoutes from './routes/admin/user.routes.js';
 import unitAdminRoutes from './routes/admin/unit.routes.js';
+import unitRoutes from './routes/athlete/unit.routes.js';
 import { connectDB } from './config/db.js';
 
 dotenv.config();
@@ -16,7 +17,8 @@ app.use(express.json());
 // Rotas
 app.use('/api/auth', Athlete);
 app.use('/api/admin/athlete', athleteAdminRoutes);
-app.use('/api/unit', unitAdminRoutes);
+app.use('/api/admin/unit', unitAdminRoutes);
+app.use('/api/user', unitRoutes);
 
 // Teste de rota
 app.get('/ping', (req, res) => {
