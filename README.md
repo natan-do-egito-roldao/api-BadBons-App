@@ -6,4 +6,8 @@ Este repositório documenta todas as rotas da API BadBons, incluindo exemplos de
 
 ***
 
-📚 ## Sumário
+## 📚 Sumário por rotas
+
+- [ADM](#adm)
+- [USER](#user)
+
