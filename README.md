@@ -9,13 +9,33 @@ Este repositório documenta todas as rotas da API BadBons, incluindo exemplos de
 ## 📚 Sumário por rotas
 
 - [LOGIN E CADASTRO](#login-e-cadastro)
-- [USER](#user)
+- [UNIDADES](#unidades)
+- [USUARIO](#usuario)
 
-# Login e Cadastro
+***
+
+### Login e Cadastro
 
 | Rota             | Metodo        | Descrição     |
 |------------------|---------------|---------------|
 | /ping            | GET           | Verifica se a api está online |
 | /auth            | POST          | Criar Novo Usuario          |
 | /auth/login      | POST          | Login de Usuario        |
-| /:userId/approve | PATCH         | Liberação p/ Login
+| /admin/approve-athlete/:userId | PATCH         | Liberação p/ Login
+
+***
+
+### Unidades
+
+| Rota             | Metodo        | Descrição     |
+|------------------|---------------|---------------|
+| /admin/unit      | POST          | Criar nova unidade |
+| /unit            | GET           | retorna todas as unidades |
+
+***
+
+### Usuario
+
+| Rota             | Metodo        | Descrição     |
+|------------------|---------------|---------------|
+| /user/update/:userID      | PATCH          | Atualiza dados pelo usuario |

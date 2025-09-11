@@ -5,6 +5,6 @@ import { authorize } from '../../middleware/authorize.js'
 
 const router = express.Router()
 
-router.patch('/:userId/approve', authenticate, authorize('ADM'), approveUser)
+router.patch('/:userId', authenticate, authorize('ADM'), approveUser)
 
 export default router
