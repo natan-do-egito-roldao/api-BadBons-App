@@ -28,15 +28,15 @@ Este repositório documenta todas as rotas da API BadBons, incluindo exemplos de
 
 ### Unidades
 
-| Rota             | Metodo        | Descrição                 |
-|------------------|---------------|---------------------------|
-| /admin/unit      | POST          | Criar nova unidade        |
-| /unit            | GET           | retorna todas as unidades |
+| Rota                               | Metodo        | Descrição                 |
+|------------------------------------|---------------|---------------------------|
+| [/admin/unit](/src/routes/admin)   | POST          | Criar nova unidade        |
+| [/unit](/src/routes/unit)          | GET           | retorna todas as unidades |
 
 ***
 
 ### Usuario
 
-| Rota                      | Metodo        | Descrição                   |
-|---------------------------|---------------|-----------------------------|
-| /user/update/:userID      | PATCH         | Atualiza dados pelo usuario |
+| Rota                                      | Metodo        | Descrição                   |
+|-------------------------------------------|---------------|-----------------------------|
+| [/user/update/:userID](/src/routes/user)  | PATCH         | Atualiza dados pelo usuario |
