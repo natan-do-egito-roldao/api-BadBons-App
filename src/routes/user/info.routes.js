@@ -5,6 +5,6 @@ import { authenticate } from '../../middleware/authenticate.js';
 
 const router = express.Router();
 
-router.patch('/update/:userId', authenticate, authorize('ALUNO_MENSALISTA'), alterInfo);
+router.patch('/update/:userId', authenticate, alterInfo);
 
 export default router;

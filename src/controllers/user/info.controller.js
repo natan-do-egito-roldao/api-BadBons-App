@@ -23,7 +23,7 @@ export async function alterInfo(req,res) {
             return res.status(404).json({ error: 'Usuário não encontrado' });
         }
 
-        res.json(newUser);
+        res.json({ message: `usuario atualizado com sucesso` });
     } catch (error) {
         res.status(500).json({ error: 'Erro ao alterar informações do usuário' });
     }

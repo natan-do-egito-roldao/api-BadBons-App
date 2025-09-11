@@ -1,10 +1,10 @@
 import express from 'express';
 import dotenv from 'dotenv';
-import Athlete from './routes/auth.routes.js';
+import Auth from './routes/auth/auth.routes.js';
 import athleteAdminRoutes from './routes/admin/user.routes.js';
 import unitAdminRoutes from './routes/admin/unit.routes.js';
 import { connectDB } from './config/db.js';
-import userRoutes from './routes/athlete/info.routes.js';
+import userRoutes from './routes/user/info.routes.js';
 import unitRoutes from './routes/unit/unit.routes.js';
 
 dotenv.config();
@@ -16,15 +16,15 @@ const PORT = process.env.PORT || 3000;
 app.use(express.json());
 
 // Rotas
-app.use('/auth', Athlete);
-app.use('/admin/approve-athlete', athleteAdminRoutes);
+app.use('/auth', Auth);
+app.use('/admin', athleteAdminRoutes);
 app.use('/admin/unit', unitAdminRoutes);
 app.use('/user', userRoutes);
 app.use('/unit', unitRoutes);
 
 // Teste de rota
 app.get('/ping', (req, res) => {
-  res.status(200).json({ message: 'pong' });
+  res.status(200).json({ message: 'ok' });
 });
 
 // Conexão e inicialização

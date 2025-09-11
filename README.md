@@ -16,26 +16,27 @@ Este repositório documenta todas as rotas da API BadBons, incluindo exemplos de
 
 ### Login e Cadastro
 
-| Rota             | Metodo        | Descrição     |
-|------------------|---------------|---------------|
-| [/ping](/src)            | GET           | Verifica se a api está online |
-| /auth            | POST          | Criar Novo Usuario          |
-| /auth/login      | POST          | Login de Usuario        |
-| /admin/approve-athlete/:userId | PATCH         | Liberação p/ Login
+| Rota                                                   | Metodo        | Descrição                     |
+|--------------------------------------------------------|---------------|-------------------------------|
+| [/ping](/src)                                          | GET           | Verifica se a api está online |
+| [/auth](/src/routes/auth)                              | POST          | Cadastro de Usuario           |
+| [/auth/login](/src/routes/auth)                        | POST          | Login de Usuario              |
+| [/admin/approve-athlete/:userId](/src/routes/admin)    | PATCH         | Aprova Login                  |
+| [/admin/disapprove-athlete/:userId](/src/routes/admin) | PATCH         | Reprova Login                 |
 
 ***
 
 ### Unidades
 
-| Rota             | Metodo        | Descrição     |
-|------------------|---------------|---------------|
-| /admin/unit      | POST          | Criar nova unidade |
+| Rota             | Metodo        | Descrição                 |
+|------------------|---------------|---------------------------|
+| /admin/unit      | POST          | Criar nova unidade        |
 | /unit            | GET           | retorna todas as unidades |
 
 ***
 
 ### Usuario
 
-| Rota             | Metodo        | Descrição     |
-|------------------|---------------|---------------|
-| /user/update/:userID      | PATCH          | Atualiza dados pelo usuario |
+| Rota                      | Metodo        | Descrição                   |
+|---------------------------|---------------|-----------------------------|
+| /user/update/:userID      | PATCH         | Atualiza dados pelo usuario |
