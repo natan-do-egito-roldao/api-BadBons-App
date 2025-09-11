@@ -18,7 +18,7 @@ Este repositório documenta todas as rotas da API BadBons, incluindo exemplos de
 
 | Rota             | Metodo        | Descrição     |
 |------------------|---------------|---------------|
-| /ping            | GET           | Verifica se a api está online |
+| [/ping](/src/server.js)            | GET           | Verifica se a api está online |
 | /auth            | POST          | Criar Novo Usuario          |
 | /auth/login      | POST          | Login de Usuario        |
 | /admin/approve-athlete/:userId | PATCH         | Liberação p/ Login
