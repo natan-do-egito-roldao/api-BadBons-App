@@ -13,11 +13,11 @@ Este documento descreve exclusivamente as requisições relacionadas às funcion
 
 ### Alterações possiveis 
 
-| Cave             | Tipo            |
-|------------------|-----------------|
-| nome             | String          |
-| email            | String          |
-| telefone         | Number          |
+| Chave             | Tipo            |
+|-------------------|-----------------|
+| nome              | String          |
+| email             | String          |
+| telefone          | Number          |
 
 ### Headers
 
