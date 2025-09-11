@@ -8,6 +8,14 @@ Este repositório documenta todas as rotas da API BadBons, incluindo exemplos de
 
 ## 📚 Sumário por rotas
 
-- [ADM](#adm)
+- [LOGIN E CADASTRO](#login-e-cadastro)
 - [USER](#user)
 
+# Login e Cadastro
+
+| Rota             | Metodo        | Descrição     |
+|------------------|---------------|---------------|
+| /ping            | GET           | Verifica se a api está online |
+| /auth            | POST          | Criar Novo Usuario          |
+| /auth/login      | POST          | Login de Usuario        |
+| /:userId/approve | PATCH         | Liberação p/ Login

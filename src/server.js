@@ -15,10 +15,10 @@ const PORT = process.env.PORT || 3000;
 app.use(express.json());
 
 // Rotas
-app.use('/api/auth', Athlete);
-app.use('/api/admin/athlete', athleteAdminRoutes);
-app.use('/api/admin/unit', unitAdminRoutes);
-app.use('/api/user', userRoutes);
+app.use('/auth', Athlete);
+app.use('/admin/athlete', athleteAdminRoutes);
+app.use('/admin/unit', unitAdminRoutes);
+app.use('/user', userRoutes);
 
 // Teste de rota
 app.get('/ping', (req, res) => {
