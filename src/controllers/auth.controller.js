@@ -1,8 +1,9 @@
 import bcrypt from 'bcryptjs';
-import Athlete from '../models/userModel.js';
+import User from '../models/userModel.js';
 import Treino from '../models/trainingModel.js';
 import Unit from '../models/unitModel.js';
 import jwt from 'jsonwebtoken'
+import crypto from 'crypto';
 
 export const createAthlete = async (req, res) => {
     try {
@@ -34,7 +35,7 @@ export const createAthlete = async (req, res) => {
             return res.status(400).json({ success: false, message: 'Senha é obrigatória.' });
         }
 
-        if (await Athlete.findOne({ email })) {
+        if (await User.findOne({ email })) {
             return res.status(400).json({ success: false, message: 'Email já cadastrado.' });
         }
 
@@ -49,7 +50,7 @@ export const createAthlete = async (req, res) => {
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
 
-        const newAthlete = await Athlete.create({
+        const newAthlete = await User.create({
             nome,
             idade,
             email,
@@ -76,23 +77,30 @@ export const createAthlete = async (req, res) => {
 export const login = async (req, res) => {
   const { email, password } = req.body
 
-  const user = await Athlete.findOne({ email })
-  if ( user.status !== 'active')
+  const user = await User.findOne({ email })
+  if ( user.status !== 'active') {
     return res.status(401).json({ error: 'Usuário pendente' })
+  }
+  const deviceId = crypto.randomUUID(); 
 
   const ok = await bcrypt.compare(password, user.password)
   if (!user || !ok) return res.status(402).json({ error: 'Credenciais inválidas' })
 
-  const token = jwt.sign(
-    { id: user._id, role: user.role },
+  const accessToken = jwt.sign(
+    { sub: user._id, role: user.role, tv: user.tokenVersion },
     process.env.JWT_SECRET,
     { expiresIn: '15m' }
   )
 
-  res.json({ token, user: { 
-    id: user._id, 
-    name: user.name, 
-    role: user.role,
+    const refreshToken = jwt.sign(
+    { sub: user._id, tv: user.tokenVersion, deviceId: deviceId },
+    process.env.JWT_SECRET,
+    { expiresIn: '30d' }
+  )
 
- } })
+  const newUser = await User.findByIdAndUpdate(user._id, { $push: { activeDevices: { deviceId, refreshToken } } }, { new: true });
+    if (!newUser) {
+      return res.status(500).json({ error: 'Erro ao atualizar usuário' });
+    }
+  res.json({ accesstoken: accessToken, refreshtoken: refreshToken })
 }

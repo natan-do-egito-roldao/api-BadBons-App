@@ -85,12 +85,20 @@ const athleteModel = new mongoose.Schema({
     treinosTotais: { type: Number, default: 0 },
     progresso: { type: Number, default: 0 },
     fotoPerfil: { type: String },
+    tokenVersion: { type: Number, default: 1 },
     status: {
         type: String,
         enum: ["pending", "active", "rejected"],
         default: "pending"
     },
-    userRanking:{ type: [ UserRankingSchema ], required: true }
+    userRanking:{ type: [ UserRankingSchema ], required: true },
+    activeDevices: [
+        {
+        deviceId: { type: String, required: true },
+        refreshToken: { type: String },      // opcional
+        createdAt: { type: Date, default: Date.now }
+        }
+    ]
 });
 
 const Athlete = mongoose.model('Athlete', athleteModel);
