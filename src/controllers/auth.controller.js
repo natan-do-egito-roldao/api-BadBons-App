@@ -102,5 +102,5 @@ export const login = async (req, res) => {
     if (!newUser) {
       return res.status(500).json({ error: 'Erro ao atualizar usuário' });
     }
-  res.json({ accesstoken: accessToken, refreshtoken: refreshToken })
+  res.json({ accesstoken: accessToken, refreshtoken: refreshToken, user: user, deviceId: deviceId })
 }

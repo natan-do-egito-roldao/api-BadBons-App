@@ -24,7 +24,7 @@ app.use('/unit', unitRoutes);
 
 // Teste de rota
 app.get('/ping', (req, res) => {
-  res.status(200).json({ message: 'ok' });
+  res.sendStatus(200);
 });
 
 // Conexão e inicialização
