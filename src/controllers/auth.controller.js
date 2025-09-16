@@ -4,6 +4,7 @@ import Treino from '../models/trainingModel.js';
 import Unit from '../models/unitModel.js';
 import jwt from 'jsonwebtoken'
 import crypto from 'crypto';
+import { error } from 'console';
 
 export const createAthlete = async (req, res) => {
     try {
@@ -100,18 +101,18 @@ export const login = async (req, res) => {
     process.env.JWT_SECRET,
     { expiresIn: '30d' }
   )
-
-  const exists = User.activeDevices.some(d => d.deviceId === deviceId);
-
-    if (!exists) {
+    if (!user.activeDevices) {
         const newUser = await User.findByIdAndUpdate(
             user._id,
             { $push: { activeDevices: { deviceId, refreshToken } } },
             { new: true }
         );
-        return newUser;
+    } else {
+        if (user.activeDevices.length >= 1) {
+            return res.status(403).json({ error: 'Limite de dispositivos atingido' })
+        }
     }
-
+    
     if (!newUser) {
         return res.status(500).json({ error: 'Erro ao atualizar usuário' });
     }
