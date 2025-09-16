@@ -5,7 +5,7 @@ import { authorize } from '../../middleware/authorize.js'
 
 const router = express.Router()
 
-router.patch('approve-athlete/:userId', authenticate, authorize('ADM'), approveUser)
-router.patch('disapprove-athlete/:userId', authenticate, authorize('ADM'), disapproveUser)
+router.patch('/approve-user/:userId', authenticate, authorize('ADM'), approveUser)
+router.patch('/disapprove-user/:userId', authenticate, authorize('ADM'), disapproveUser)
 
 export default router

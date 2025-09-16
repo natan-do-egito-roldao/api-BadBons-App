@@ -9,7 +9,7 @@ Este documento descreve exclusivamente as requisições relacionadas às funcion
 alteração feita ao enviar requisição
 
 ```https
-  PATCH /admin/approve-athlete/:userId
+  PATCH /admin/approve-user/:userId
 ```
 
 ### Headers
@@ -40,7 +40,7 @@ alteração feita ao enviar requisição
 alteração feita ao enviar requisição
 
 ```https
-  PATCH /admin/disapprove-athlete/:userId
+  PATCH /admin/disapprove-user/:userId
 ```
 
 ### Headers

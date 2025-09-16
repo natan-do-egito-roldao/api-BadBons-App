@@ -84,7 +84,7 @@ const athleteModel = new mongoose.Schema({
     treinosFeitos: { type: Number, default: 0 },
     treinosTotais: { type: Number, default: 0 },
     progresso: { type: Number, default: 0 },
-    fotoPerfil: { type: String },
+    foto: { type: String },
     tokenVersion: { type: Number, default: 1 },
     status: {
         type: String,

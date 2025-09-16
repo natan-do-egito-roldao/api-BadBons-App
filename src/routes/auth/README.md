@@ -14,6 +14,8 @@ Este documento descreve exclusivamente as requisições relacionadas às funcion
     {
         "nome": "exemplo",
         "idade": 10,
+        "dataNascimento": 2000-01-01,
+        "cpf": 12345678900,
         "email": "exemplo@exemplo.com",
         "telefone": "12345678901",
         "sexo": "Masculino",
@@ -101,3 +103,65 @@ status !== 'active'
     }
 ```
 
+
+## Logout de usuario 
+
+```https
+  POST /auth/Logout
+```
+
+### Exemplo de requisição
+
+```json
+    {
+        "refreshToken": "Bearer exemplo1234255exemplo"
+    }
+```
+
+### Exemplo de resposta(STATUS 200)
+
+```json
+    {
+	"message": "usuario deslogado com sucesso",
+	"dispositivosAtivos": []
+}
+```
+
+### Exemplo de resposta(STATUS 401)
+
+falta do "Bearer "
+
+```json
+    {
+        "error" : "token ausente ou mal formatado"
+    }
+```
+
+### Exemplo de resposta(STATUS 402)
+
+token de login antigo
+
+```json
+    {
+        "error" : "Token não associado a algum dispositivo com está conta"
+    }
+```
+
+
+### Exemplo de resposta(STATUS 403)
+
+```json
+    {
+        "error" : "Refresh token inválido"
+    }
+```
+
+### Exemplo de resposta(STATUS 404)
+
+caso aconteça reportar
+
+```json
+    {
+        "error" : "usuario não encontrado"
+    }
+```

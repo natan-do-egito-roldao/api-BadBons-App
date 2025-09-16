@@ -78,6 +78,40 @@ export const createAthlete = async (req, res) => {
     }
 };
 
+export const logout = async (req,res) => {
+    const auth = req.body.refreshToken || ''
+
+    if (!auth.startsWith('Bearer ')) {
+        return res.status(401).json({ error: 'token ausente ou mal formatado'})
+    }
+
+    const refreshToken = auth.slice(7).trim();
+    if (!await User.findOne({ "activeDevices.refreshToken": refreshToken })) {
+        res.status(402).json({error:" Token não associado a algum dispositivo com está conta"})
+    }
+
+    let payload;
+    try {
+        payload = jwt.verify(refreshToken, process.env.JWT_SECRET)
+    }catch (err) {
+        return res.status(403).json({ error: 'Refresh token inválido' });
+    }
+    
+    const { sub: userId, deviceId } = payload;
+
+    const user = await User.findByIdAndUpdate(
+        userId,
+        {$pull: {activeDevices: { deviceId }}},
+        { new: true }
+    );
+
+    if(!user) {
+        res.statu(404).json({ error: `usuario não encontrado` });    
+    }
+    res.status(200).json({ message: `usuario deslogado com sucesso`, dispositivosAtivos: user.activeDevices });
+
+}
+
 export const login = async (req, res) => {
     const { email, password } = req.body
 
@@ -101,22 +135,22 @@ export const login = async (req, res) => {
     process.env.JWT_SECRET,
     { expiresIn: '30d' }
     )
-    let newUser = null;
 
-    if (!user.activeDevices) {
+    let newUser;
+
+    if (user.activeDevices <= 2 || user.activeDevices.length === 0) {
         newUser = await User.findByIdAndUpdate(
-            user._id,
-            { $push: { activeDevices: { deviceId, refreshToken } } },
-            { new: true }
+        user._id,
+        { $push: { activeDevices: { deviceId, refreshToken } } },
+        { new: true }
         );
-        return res.json({ accesstoken: accessToken, refreshtoken: refreshToken, user: user })
     } else {
-        if (user.activeDevices.length >= 1) {
-            return res.status(403).json({ error: 'Limite de dispositivos atingido' })
-        }
+        return res.status(403).json({ error: 'Usuário já está logado em outro dispositivo' });
     }
 
-    if (!newUser) {
-        return res.status(500).json({ error: 'Erro ao atualizar usuário' });
-    }
+    return res.json({
+      accesstoken: accessToken,
+      refreshtoken: refreshToken,
+      user: newUser
+    });
 }
