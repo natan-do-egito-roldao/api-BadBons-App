@@ -79,42 +79,44 @@ export const createAthlete = async (req, res) => {
 };
 
 export const login = async (req, res) => {
-  const { email, password } = req.body
+    const { email, password } = req.body
 
-  const user = await User.findOne({ email })
-  if ( user.status !== 'active') {
+    const user = await User.findOne({ email })
+    if ( user.status !== 'active') {
     return res.status(401).json({ error: 'Usuário pendente' })
-  }
-  const deviceId = crypto.randomUUID(); 
+    }
+    const deviceId = crypto.randomUUID(); 
 
-  const ok = await bcrypt.compare(password, user.password)
-  if (!user || !ok) return res.status(402).json({ error: 'Credenciais inválidas' })
+    const ok = await bcrypt.compare(password, user.password)
+    if (!user || !ok) return res.status(402).json({ error: 'Credenciais inválidas' })
 
-  const accessToken = jwt.sign(
+    const accessToken = jwt.sign(
     { sub: user._id, role: user.role, tv: user.tokenVersion },
     process.env.JWT_SECRET,
     { expiresIn: '15m' }
-  )
+    )
 
     const refreshToken = jwt.sign(
     { sub: user._id, tv: user.tokenVersion, deviceId: deviceId },
     process.env.JWT_SECRET,
     { expiresIn: '30d' }
-  )
+    )
+    let newUser = null;
+
     if (!user.activeDevices) {
-        const newUser = await User.findByIdAndUpdate(
+        newUser = await User.findByIdAndUpdate(
             user._id,
             { $push: { activeDevices: { deviceId, refreshToken } } },
             { new: true }
         );
+        return res.json({ accesstoken: accessToken, refreshtoken: refreshToken, user: user })
     } else {
         if (user.activeDevices.length >= 1) {
             return res.status(403).json({ error: 'Limite de dispositivos atingido' })
         }
     }
-    
+
     if (!newUser) {
         return res.status(500).json({ error: 'Erro ao atualizar usuário' });
     }
-  res.json({ accesstoken: accessToken, refreshtoken: refreshToken, user: user })
 }
