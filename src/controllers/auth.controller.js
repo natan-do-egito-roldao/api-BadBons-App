@@ -98,9 +98,19 @@ export const login = async (req, res) => {
     { expiresIn: '30d' }
   )
 
-  const newUser = await User.findByIdAndUpdate(user._id, { $push: { activeDevices: { deviceId, refreshToken } } }, { new: true });
-    if (!newUser) {
-      return res.status(500).json({ error: 'Erro ao atualizar usuário' });
+  const exists = User.activeDevices.some(d => d.deviceId === deviceId);
+
+    if (!exists) {
+        const newUser = await User.findByIdAndUpdate(
+            user._id,
+            { $push: { activeDevices: { deviceId, refreshToken } } },
+            { new: true }
+        );
+        return newUser;
     }
-  res.json({ accesstoken: accessToken, refreshtoken: refreshToken, user: user, deviceId: deviceId })
+
+    if (!newUser) {
+        return res.status(500).json({ error: 'Erro ao atualizar usuário' });
+    }
+  res.json({ accesstoken: accessToken, refreshtoken: refreshToken, user: user })
 }

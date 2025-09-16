@@ -43,7 +43,7 @@ const athleteModel = new mongoose.Schema({
     },
     nivel: {
         type: Number,
-        required: [true, 'Nível é obrigatório']
+        default: 1,
     },
     unidade: {
         type: mongoose.Schema.Types.ObjectId, ref: 'Unit', required: [false] // Adiciona a Referencia do Schema Unidade ao Schema de Atleta
