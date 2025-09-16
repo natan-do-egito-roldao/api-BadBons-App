@@ -8,7 +8,7 @@ import crypto from 'crypto';
 export const createAthlete = async (req, res) => {
     try {
         console.log('cadastrando um novo atleta');
-        const { nome, idade, email, telefone, sexo, role, password, unidade, turma} = req.body;
+        const { nome, idade, email, cpf, dataNascimento, nivel, telefone, sexo, role, password, unidade, turma } = req.body;
 
         if (!unidade) {
             return res.status(400).json({ success: false, message: 'Unidade é obrigatória.' });
@@ -57,6 +57,9 @@ export const createAthlete = async (req, res) => {
             telefone,
             role,
             sexo,
+            nivel,
+            cpf,
+            dataNascimento,
             password: hashedPassword,
             treinosPendentes: treinos.map(treino => treino._id),
             unidade: unidade,
