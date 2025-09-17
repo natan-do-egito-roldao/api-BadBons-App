@@ -42,39 +42,32 @@ export async function alterInfo(req,res) {
 
 export async function alterImage(req,res) {
     try {
-        console.log("entrou")
-        const tokenUserId = req.user.sub
-        const userId = req.params.userId;
+        const userId = req.user.sub;
         const image = req.file.path;
 
-        if (tokenUserId == userId) {
-            if (!image) {
-                return res.status(400).json({ error: "imagem não selecionada"})
-            }
-
-            const result = await cloudinary.uploader.upload(image, {
-                resource_type: 'image',
-                folder: `users/${userId}`, // opcional: organiza as imagens por usuário
-            });
-
-            const updatedUser = await User.findByIdAndUpdate(
-                userId,
-                { foto: result.secure_url },
-                { new: true }
-            );
-
-            // Remove arquivo temporário
-            fs.unlinkSync(image);
-
-            return res.status(200).json({
-                message: 'Imagem enviada com sucesso!',
-                urlFoto: result.secure_url,
-                usuarioAtualizado: updatedUser,
-            });
-        } else {
-            return res.status(401).json({ error: "Ids não batem"})
+        if (!image) {
+            return res.status(400).json({ error: "imagem não selecionada"})
         }
-        
+
+        const result = await cloudinary.uploader.upload(image, {
+            resource_type: 'image',
+            folder: `users/${userId}`, // opcional: organiza as imagens por usuário
+        });
+
+        const updatedUser = await User.findByIdAndUpdate(
+            userId,
+            { foto: result.secure_url },
+            { new: true }
+        );
+
+        // Remove arquivo temporário
+        fs.unlinkSync(image);
+
+        return res.status(200).json({
+            message: 'Imagem enviada com sucesso!',
+            urlFoto: result.secure_url,
+            usuarioAtualizado: updatedUser,
+        });      
 
     } catch(error) {
         console.log(error)
