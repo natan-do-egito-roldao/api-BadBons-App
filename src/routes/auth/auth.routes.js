@@ -12,7 +12,7 @@ router.post('/', createAthlete);
 
 router.post('/login', login)
 
-router.post('/loginToken', authenticate, loginToken)
+router.post('/login-Token', authenticate, loginToken)
 
 router.post('/logout', logout)
 
