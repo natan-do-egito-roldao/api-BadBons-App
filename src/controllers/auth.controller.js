@@ -112,8 +112,7 @@ export const logout = async (req,res) => {
 
 }
 
-export const login = async (req, res) => {
-    const { email, password } = req.body
+export const loginToken = async (req,res) => {
     const tokenUser = req.user.deviceId;
 
     if (!tokenUser) {
@@ -123,9 +122,13 @@ export const login = async (req, res) => {
     if (tokenUser) {
         return res.sendStatus(200)
     }
+}
+
+export const login = async (req, res) => {
+    const { email, password } = req.body
 
     const user = await User.findOne({ email })
-    
+
     if ( user.status !== 'active') {
         return res.sendStatus(401)
     }
@@ -145,9 +148,6 @@ export const login = async (req, res) => {
     process.env.JWT_SECRET,
     { expiresIn: '30d' }
     )
-
-    const conected = await User.findById(tokenUser.devicedId)
-    console.log(conected)
 
     let newUser;
 
