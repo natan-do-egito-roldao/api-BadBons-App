@@ -114,6 +114,7 @@ export const logout = async (req,res) => {
 
 export const login = async (req, res) => {
     const { email, password } = req.body
+    const tokenUser = req.user;
 
     const user = await User.findOne({ email })
     if ( user.status !== 'active') {
@@ -136,9 +137,12 @@ export const login = async (req, res) => {
     { expiresIn: '30d' }
     )
 
+    const conected = await User.findById(tokenUser.devicedId)
+    console.log(conected)
+
     let newUser;
 
-    if (user.activeDevices <= 2 || user.activeDevices.length === 0) {
+    if (user.activeDevices || tokenUser.devicedId  ) {
         newUser = await User.findByIdAndUpdate(
         user._id,
         { $push: { activeDevices: { deviceId, refreshToken } } },

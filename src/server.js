@@ -8,6 +8,7 @@ import userRoutes from './routes/user/info.routes.js';
 import unitRoutes from './routes/unit/unit.routes.js';
 import { v2 as cloudinary, v2 } from 'cloudinary';
 
+const permitedVersion = "1.0.0"; 
 
 dotenv.config();
 
@@ -35,7 +36,7 @@ app.use('/unit', unitRoutes);
 // Teste de rota
 app.get('/ping', (req, res) => {
   const version = req.query.version
-  if (!version) {
+  if (version != permitedVersion) {
     res.sendStatus(426);
   }
   res.sendStatus(200);
