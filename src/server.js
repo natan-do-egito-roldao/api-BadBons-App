@@ -34,6 +34,10 @@ app.use('/unit', unitRoutes);
 
 // Teste de rota
 app.get('/ping', (req, res) => {
+  const version = req.query.version
+  if (!version) {
+    res.sendStatus(426);
+  }
   res.sendStatus(200);
 });
 

@@ -9,6 +9,7 @@ const   router = Router();
 router.post('/', createAthlete);
 
 router.post('/login', login)
+
 router.post('/logout', logout)
 
 router.post('/reAuth', reAuth)

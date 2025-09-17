@@ -14,3 +14,4 @@ router.patch('/update', authenticate, alterInfo);
 router.patch('/update-image', authenticate, upload.single("fotoPerfil"), alterImage);
 
 export default router;
+
