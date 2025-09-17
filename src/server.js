@@ -6,11 +6,21 @@ import unitAdminRoutes from './routes/admin/unit.routes.js';
 import { connectDB } from './config/db.js';
 import userRoutes from './routes/user/info.routes.js';
 import unitRoutes from './routes/unit/unit.routes.js';
+import { v2 as cloudinary, v2 } from 'cloudinary';
+
 
 dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+const api_secret = process.env.CLOUD_SECRET
+const api_key = process.env.CLOUD_KEY
+
+v2.config({ 
+  cloud_name: 'dccx9drur', 
+  api_key: api_key, 
+  api_secret: api_secret
+});
 
 // Middlewares
 app.use(express.json());
