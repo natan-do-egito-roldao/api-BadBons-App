@@ -114,16 +114,25 @@ export const logout = async (req,res) => {
 
 export const login = async (req, res) => {
     const { email, password } = req.body
-    const tokenUser = req.user;
+    const tokenUser = req.user.deviceId;
+
+    if (!tokenUser) {
+        return res.sendStatus(400)
+    }
+
+    if (tokenUser) {
+        return res.sendStatus(200)
+    }
 
     const user = await User.findOne({ email })
+    
     if ( user.status !== 'active') {
-    return res.status(401).json({ error: 'Usuário pendente' })
+        return res.sendStatus(401)
     }
     const deviceId = crypto.randomUUID(); 
 
     const ok = await bcrypt.compare(password, user.password)
-    if (!user || !ok) return res.status(402).json({ error: 'Credenciais inválidas' })
+    if (!user || !ok) return res.sendStatus(402)
 
     const accessToken = jwt.sign(
     { sub: user._id, role: user.role, tv: user.tokenVersion },
@@ -142,14 +151,14 @@ export const login = async (req, res) => {
 
     let newUser;
 
-    if (user.activeDevices || tokenUser.devicedId  ) {
+    if (user.activeDevices) {
         newUser = await User.findByIdAndUpdate(
         user._id,
         { $push: { activeDevices: { deviceId, refreshToken } } },
         { new: true }
         );
     } else {
-        return res.status(403).json({ error: 'Usuário já está logado em outro dispositivo' });
+        return res.sendStatus(403);
     }
 
     return res.json({
