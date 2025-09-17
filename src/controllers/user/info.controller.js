@@ -1,6 +1,7 @@
 import User from '../../models/userModel.js';
 import bcrypt from 'bcryptjs';
 import { v2 as cloudinary, v2 } from 'cloudinary';
+import { Console } from 'console';
 import fs from 'fs';
 
 
@@ -44,7 +45,7 @@ export async function alterImage(req,res) {
     try {
         const userId = req.user.sub;
         const image = req.file.path;
-
+        console.log(userId, image)
         if (!image) {
             return res.status(400).json({ error: "imagem não selecionada"})
         }
@@ -53,13 +54,12 @@ export async function alterImage(req,res) {
             resource_type: 'image',
             folder: `users/${userId}`, // opcional: organiza as imagens por usuário
         });
-
+        console.log(result)
         const updatedUser = await User.findByIdAndUpdate(
             userId,
             { foto: result.secure_url },
             { new: true }
         );
-
         // Remove arquivo temporário
         fs.unlinkSync(image);
 
