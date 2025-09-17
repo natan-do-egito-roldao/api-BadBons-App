@@ -8,7 +8,7 @@ Este documento descreve exclusivamente as requisições relacionadas às funcion
 
 
 ```https
-  PATCH /user/update/:userID 
+  PATCH /user/update
 ```
 
 ### Alterações possiveis 
@@ -47,7 +47,7 @@ Este documento descreve exclusivamente as requisições relacionadas às funcion
 
 
 ```https
-  PATCH /user/update-image/:userID 
+  PATCH /user/update-image 
 ```
 
 
