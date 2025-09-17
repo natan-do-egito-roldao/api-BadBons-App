@@ -163,7 +163,6 @@ export const login = async (req, res) => {
 
     return res.json({
       accesstoken: accessToken,
-      refreshtoken: refreshToken,
       user: newUser
     });
 }
