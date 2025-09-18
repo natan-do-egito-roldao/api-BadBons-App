@@ -8,6 +8,6 @@ const router = express.Router()
 
 router.get('/', getAllUnits)
 
-router.get('/user',authenticate, getUnit)
+router.get('/user',authenticate , getUnit)
 
 export default router
