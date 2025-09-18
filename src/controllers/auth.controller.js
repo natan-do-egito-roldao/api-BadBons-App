@@ -5,6 +5,7 @@ import Unit from '../models/unitModel.js';
 import jwt from 'jsonwebtoken'
 import crypto from 'crypto';
 import { error } from 'console';
+import { omit } from '../services/omit.js';
 
 export const createAthlete = async (req, res) => {
     try {
@@ -161,10 +162,41 @@ export const login = async (req, res) => {
         return res.sendStatus(403);
     }
 
-    const { password: _, ...userSafe } = newUser._doc || newUser;
+    const userSafe = omit(newUser._doc, [
+        "__v",
+        "treinosConcluidos",
+        "nome",
+        "_id",
+        "status",
+        "idade",
+        "cpf",
+        "email",
+        "dataNascimento",
+        "telefone",
+        "sexo",
+        "nivel",
+        "unidade",
+        "turma",
+        "password",
+        "statusNivel",
+        "role",
+        "treinosPendentes",
+        "progresso",
+        "tokenVersion",
+        "criadoEm",
+        "desafiosConcluidos",
+        "userRanking",
+        "treinosFeitos",
+        "treinosTotais",
+        "treinosConcluidos",
+        "foto"
+    ]);
+
+    const userRefreshToken = user.activeDevices[0].refreshToken;
+
 
     return res.json({
       accesstoken: accessToken,
-      user: userSafe
+      RefreshToken: userRefreshToken
     });
 }
