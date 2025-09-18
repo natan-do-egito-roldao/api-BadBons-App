@@ -161,10 +161,10 @@ export const login = async (req, res) => {
         return res.sendStatus(403);
     }
 
-    const userSafe = Object.assing({}, newUser);
+    const { password: _, ...userSafe } = newUser._doc || newUser;
 
     return res.json({
       accesstoken: accessToken,
-      user: newUser
+      user: userSafe
     });
 }
