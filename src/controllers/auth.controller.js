@@ -161,7 +161,7 @@ export const login = async (req, res) => {
         return res.sendStatus(403);
     }
 
-    console.log(typeof newUser)
+    const userSafe = Object.assing({}, newUser);
 
     return res.json({
       accesstoken: accessToken,
