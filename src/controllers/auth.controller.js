@@ -148,18 +148,20 @@ export const login = async (req, res) => {
     process.env.JWT_SECRET,
     { expiresIn: '30d' }
     )
-
+    
     let newUser;
 
     if (user.activeDevices) {
         newUser = await User.findByIdAndUpdate(
         user._id,
-        { $push: { activeDevices: { deviceId, refreshToken } } },
+        //{ $push: { activeDevices: { deviceId, refreshToken } } },
         { new: true }
         );
     } else {
         return res.sendStatus(403);
     }
+
+    console.log(typeof newUser)
 
     return res.json({
       accesstoken: accessToken,
