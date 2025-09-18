@@ -37,7 +37,7 @@ export async function getQuantidadeTreinos(req,res) {
             "activeDevices",
             "foto"
         ]);
-        return res.json({ Treinos: userSafe });
+        return res.json({ treinosFeitos: userSafe.treinosFeitos, treinosTotais: userSafe.treinosTotais });
 
     } catch (error) {
         res.status(500).json({ error: 'Erro ao alterar informações do usuário' });
