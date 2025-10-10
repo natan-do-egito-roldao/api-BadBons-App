@@ -13,6 +13,7 @@ const sessaoSchema = new mongoose.Schema(
     diaSemana:   { type: Number, required: true },    // 0 (Dom) a 6 (Sáb)
     horaInicio:  { type: String, required: true },    // "19:00"
     duracaoMin:  { type: Number, default: 60 },       // duração em minutos
+    tags: {type: [String]},
   },
   { _id: false }
 );
