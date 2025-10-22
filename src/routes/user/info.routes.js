@@ -4,6 +4,7 @@ import { authorize } from '../../middleware/authorize.js';
 import { authenticate } from '../../middleware/authenticate.js';
 import { alterImage } from '../../controllers/user/info.controller.js';
 import { getQuantidadeTreinos } from '../../controllers/user/treinos.controller.js';
+import { getData } from '../../controllers/user/info.controller.js';
 
 import multer from "multer";
 const upload = multer({ dest: "uploads/" });
@@ -16,6 +17,8 @@ router.patch('/update', authenticate, alterInfo);
 router.patch('/update-image', authenticate, upload.single("fotoPerfil"), alterImage);
 
 router.get('/treinos', authenticate, getQuantidadeTreinos);
+
+router.get('/data', authenticate, getData);
 
 export default router;
 

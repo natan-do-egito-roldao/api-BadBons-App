@@ -1,4 +1,5 @@
 import Unit from '../../models/unitModel.js';
+import tagDay from '../../models/presenceModel.js'
 
 export const createUnit = async (req, res) => {
     console.log('cadastrando uma nova unidade');
@@ -46,7 +47,24 @@ export const createUnit = async (req, res) => {
             })),
             
         });
-        return res.status(201).json({ success: true, data: newUnit });
+        const presencas = newUnit.turmas.flatMap(turma =>
+            turma.sessoes.map(sessao => ({
+                unidadeId: newUnit._id,
+                turmaId: turma._id,
+                data: sessao.diaSemana,
+                horaInicio: sessao.horaInicio,
+            }))
+        );
+
+        const presencasUnicas = presencas.filter((p, index, self) =>
+            index === self.findIndex(
+                t => t.data === p.data && t.horaInicio === p.horaInicio
+            )
+        );
+
+        const newTagDay = await tagDay.create({ presencaSchema: presencasUnicas });
+
+        return res.status(201).json({ success: true, data: newUnit, tag: newTagDay });
     } catch (error) {
         console.error('Erro ao cadastrar unidade:', error);
         return res.status(500).json({ success: false, message: 'Erro ao cadastrar unidade.' });

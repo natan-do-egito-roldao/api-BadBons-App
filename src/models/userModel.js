@@ -98,7 +98,11 @@ const athleteModel = new mongoose.Schema({
         refreshToken: { type: String },      // opcional
         createdAt: { type: Date, default: Date.now }
         }
-    ]
+    ],
+    notificationToken: {
+        type: String, 
+        required: false
+    }
 });
 
 const Athlete = mongoose.model('Athlete', athleteModel);

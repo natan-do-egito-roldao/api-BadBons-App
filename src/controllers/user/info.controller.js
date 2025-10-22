@@ -76,3 +76,19 @@ export async function alterImage(req,res) {
     }
 
 }
+
+export async function getData(req,res) {
+    try {
+        const userId = req.user.sub;
+        const user = await User.findById(userId).select('-password -activeDevices -tokenVersion');
+
+        if (!user) {
+            return res.status(404).json({ error: 'Usuário não encontrado' });
+        }
+
+        res.status(200).json({ user });
+
+    } catch (error) {
+        res.status(500).json({ error: 'Erro ao buscar dados do usuário' });
+    } 
+}

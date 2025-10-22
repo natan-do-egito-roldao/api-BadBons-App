@@ -16,7 +16,7 @@ const sessaoSchema = new mongoose.Schema(
     tags: {type: [String]},
   },
   { _id: false }
-);
+); 
 
 const turmaSchema = new mongoose.Schema(
   {

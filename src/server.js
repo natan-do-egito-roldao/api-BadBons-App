@@ -7,10 +7,12 @@ import { connectDB } from './config/db.js';
 import userRoutes from './routes/user/info.routes.js';
 import unitRoutes from './routes/unit/unit.routes.js';
 import { v2 as cloudinary, v2 } from 'cloudinary';
+dotenv.config();
+import { jobResetTagDay } from "./jobs/jobResetTags.js";
+import mongoose from "mongoose";
 
 const permitedVersion = "1.0.0"; 
 
-dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -43,10 +45,14 @@ app.get('/ping', (req, res) => {
 });
 
 // Conexão e inicialização
-connectDB().then(() => {
-  app.listen(PORT, () => {
-    console.log(`🚀 Servidor rodando na porta ${PORT}`);
+connectDB()
+  .then(async () => {
+    await jobResetTagDay(mongoose.connection.db);
+
+    app.listen(PORT, () => {
+      console.log(`🚀 Servidor rodando na porta ${PORT}`);
+    });
+  })
+  .catch((err) => {
+    console.error("Erro ao conectar com o banco:", err);
   });
-}).catch((err) => {
-  console.error('Erro ao conectar com o banco:', err);
-});

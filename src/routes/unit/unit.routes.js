@@ -11,6 +11,7 @@ router.get('/', getAllUnits)
 
 router.get('/user',authenticate , getUnit)
 
-router.get('/teste', authenticate, tagDay)
+router.get('/tagDay', authenticate, tagDay)
+
 
 export default router

@@ -126,9 +126,14 @@ export const loginToken = async (req,res) => {
 }
 
 export const login = async (req, res) => {
-    const { email, password } = req.body
+    const { email, password, notificationToken } = req.body
 
     const user = await User.findOne({ email })
+
+    const notificationUser = await User.updateOne(   
+        {_id: user._id},
+        {$set: {notificationToken} }
+    );
 
     if ( user.status !== 'active') {
         return res.sendStatus(401)
@@ -197,6 +202,6 @@ export const login = async (req, res) => {
 
     return res.json({
       accesstoken: accessToken,
-      RefreshToken: userRefreshToken
+      RefreshToken: refreshToken
     });
 }
