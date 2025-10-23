@@ -126,12 +126,15 @@ export const viewTagDays = async (req, res) => {
     });
 
     const presencas = tagDays.flatMap(t =>
-        t.presencaSchema.map(sessao => ({
-            data: diaSemana,
-            horaInicio: horaInicio,
-            alunos: sessao.alunos
-        }))
+      t.presencaSchema
+      .filter(p => diaSemana === p.data && horaInicio === p.horaInicio)
+      .map(sessao => ({
+          data: diaSemana,
+          horaInicio: horaInicio,
+          alunos: sessao.alunos
+      }))
     );
+    console.log(presencas);
 
     const presencasUnicas = presencas.filter((p, index, self) =>
         index === self.findIndex(
