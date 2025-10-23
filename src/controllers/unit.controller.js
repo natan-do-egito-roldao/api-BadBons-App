@@ -157,16 +157,18 @@ export const confirmPresence = async (req, res) => {
     const horaInicio = req.body.horaInicio;
     const presente = req.body.marcouIda;
 
-    const updatedTag = await tagDaymodel.findOneAndUpdate(
-      { "presencaSchema.data": data, "presencaSchema.horaInicio": horaInicio, "presencaSchema.alunos.aluno": aluno },
-      { $push: { "presencaSchema.$[elem].alunos": { presente: presente } } },
-      {
-        new: true,
-        arrayFilters: [{ "elem.horaInicio": horaInicio }]
-      }
+    const newTagDay = await tagDaymodel.findOneAndUpdate(
+      { "presencaSchema.data": diaSemana, "presencaSchema.horaInicio": horaInicio },
+      { $push: { "presencaSchema.$[elem].alunos.aluno": { presente: presente } } },
+        {
+          new: true,
+          arrayFilters: [{ "elem.horaInicio": horaInicio }]
+        }
     );
 
-    res.status(200).json({ success: true, data: updatedTag });
+    console.log(newTagDay);
+
+    res.status(200).json({ success: true, data: newTagDay });
 
   } catch (error){
     res.status(500).json({ success: false, message: "Erro ao confirmar presença" });
