@@ -1,8 +1,15 @@
 export function authorize(role) {
   return (req, res, next) => {
-    if (!req.user || req.user.role !== role) {
-      return res.status(403).json({ error: 'Acesso negado: permissão insuficiente' })
+    let count = 0;
+    while (!(role[count] === req.user.role)){
+      if (!(role[count] === req.user.role)){ 
+        if (count === role.length -1) {
+          return res.status(403).json({ error: 'Acesso negado: permissão insuficiente' });
+        }else{
+          count++;
+        }
+      }
     }
-    next()
+    next();
   }
 }

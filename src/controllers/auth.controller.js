@@ -205,3 +205,17 @@ export const login = async (req, res) => {
       RefreshToken: refreshToken
     });
 }
+
+export const userData = async (req, res) => {
+    try {
+        const userId = req.user.sub;
+        const user = await User.findById(userId).select('-password');
+        if (!user) {
+            return res.status(404).json({ error: 'Usuário não encontrado' });
+        }
+        res.json(user);
+    } catch (err) {
+        console.error('Erro ao obter dados do usuário:', err);
+        res.status(500).json({ error: 'Erro ao obter dados do usuário' });
+    }
+};

@@ -6,7 +6,6 @@ export function authenticate(req, res, next) {
   if (!auth.startsWith('Bearer ')) {
     return res.status(401).json({ error: 'Token ausente ou mal formatado' })
   }
-
   const token = auth.slice(7).trim()
 
   try {
