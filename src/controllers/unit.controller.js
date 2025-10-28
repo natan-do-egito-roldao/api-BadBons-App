@@ -4,8 +4,27 @@ import tagDaymodel from '../models/presenceModel.js';
 
 export const getAllUnits = async (req, res) => {
     try {
+      console.log(req.query.onlyHours);
+      if (Number(req.query.onlyHours) === 1) {
+        const units = await Unit.find();
+        const unitsWithHours = units.flatMap(unit => ({
+          bairro: unit.bairro,
+          endereco: unit.endereco,
+          turmas: unit.turmas.map(turma => ({
+            nome: turma.nome,
+            sessoes: turma.sessoes.map(sessao => ({
+              horaInicio: sessao.horaInicio,
+              diaSemana: sessao.diaSemana
+            }))
+          }))
+        }));
+        console.log('apenas horas');
+        res.status(200).json({ success: true, data: unitsWithHours });
+      } else {
+        console.log('todas as infos');
         const units = await Unit.find();
         res.status(200).json({ success: true, data: units });
+      }
     } catch (error) {
         console.error('Erro ao buscar unidades:', error);
         res.status(500).json({ success: false, message: 'Erro ao buscar unidades' });
@@ -157,18 +176,29 @@ export const confirmPresence = async (req, res) => {
     const horaInicio = req.body.horaInicio;
     const presente = req.body.marcouIda;
 
-    const newTagDay = await tagDaymodel.findOneAndUpdate(
-      { "presencaSchema.data": diaSemana, "presencaSchema.horaInicio": horaInicio },
-      { $push: { "presencaSchema.$[elem].alunos.aluno": { presente: presente } } },
-        {
-          new: true,
-          arrayFilters: [{ "elem.horaInicio": horaInicio }]
-        }
+    const updatedTag = await tagDaymodel.findOneAndUpdate(
+      {
+        "presencaSchema.data": String(data),
+        "presencaSchema.horaInicio": String(horaInicio),
+        "presencaSchema.alunos.aluno": aluno, // garante que o aluno exista
+      },
+      {
+        $set: {
+          "presencaSchema.$[sess].alunos.$[stud].presente": presente,
+        },
+      },
+      {
+        new: true,
+        arrayFilters: [
+          { "sess.data": data, "sess.horaInicio": horaInicio },
+          { "stud.aluno": aluno },
+        ],
+      }
     );
 
-    console.log(newTagDay);
+    console.log(updatedTag);
 
-    res.status(200).json({ success: true, data: newTagDay });
+    res.status(200).json({ success: true, data: updatedTag });
 
   } catch (error){
     res.status(500).json({ success: false, message: "Erro ao confirmar presença" });
