@@ -7,13 +7,17 @@ import fs from 'fs';
 
 export async function alterInfo(req,res) {
     try{
-        const data = req.user;
+        const oldPassword = req.body.oldPassword;
+        const userId = req.user.sub;
+        const user = await User.findById(userId);
+        const isMatch = await bcrypt.compare(oldPassword, user.password);
 
-        if (Object.keys(data).length === 0) {
+        const data = req.body;
+
+        if (!((Object.keys(data).includes('nome') || Object.keys(data).includes('email') || Object.keys(data).includes('telefone') || Object.keys(data).includes('newPassword')))) {
             return res.status(400).json({ error: 'Nenhum dado fornecido para alteração' });
         }
-
-        const allowedFields = ['nome', 'email', 'telefone', 'password'];
+        const allowedFields = ['nome', 'email', 'telefone', 'newPassword'];
         const alterData = {};
         
         allowedFields.forEach(field => {
@@ -22,14 +26,18 @@ export async function alterInfo(req,res) {
             }
         });
 
-        if (alterData.includes('password')) {
+        if (Object.keys(alterData).includes('newPassword') && isMatch) {
             const salt = await bcrypt.genSalt(10);
-            const hashedPassword = await bcrypt.hash(alterData.password, salt);
-            alterData.password = hashedPassword;
+            const hashedPassword = await bcrypt.hash(alterData.newPassword, salt);
+            alterData.newPassword = hashedPassword;
             alterData.tokenVersion += 1;
         }
 
-        const newUser = await User.findByIdAndUpdate(data.sub, alterData, { new: true });
+        if (!isMatch) {
+            return res.status(400).json({ error: 'Senha antiga incorreta' });
+        }
+        
+        const newUser = await User.findByIdAndUpdate(userId, alterData, { new: true });
 
         if (!newUser) {
             return res.status(404).json({ error: 'Usuário não encontrado' });

@@ -16,6 +16,10 @@ import loginRoute from './routes/oldApi/login.js';
 import credentialsRoute from './routes/oldApi/credentials.js';
 import loginTokenRoute from './routes/oldApi/loginToken.js';
 import imgRoute from './routes/oldApi/img.js';
+import imgUserRoutes from './routes/oldApi/imgUSer.js';
+import swapEmailRoutes from './routes/oldApi/swapEmailRoutes.js';
+import swapPasswordRoutes from './routes/oldApi/swapPassword.js';
+import swapCredentialsRoutes from './routes/oldApi/swapCredentials.js';
 import mongoose from "mongoose";
 import { login } from './controllers/auth.controller.js';
 
@@ -51,6 +55,10 @@ app.use('/login', loginRoute);
 app.use('/credentials', credentialsRoute);
 app.use('/login-token', loginTokenRoute);
 app.use('/img/:img', imgRoute);
+app.use('/upload-photo-profile', imgUserRoutes);
+app.use('/swap-email', swapEmailRoutes);
+app.use('/swap-password', swapPasswordRoutes);
+app.use('/swap-credentials', swapCredentialsRoutes);
 
 // Teste de rota
 app.get('/ping', (req, res) => {

@@ -199,7 +199,6 @@ export const login = async (req, res) => {
 
     const userRefreshToken = user.activeDevices[0].refreshToken;
 
-
     return res.json({
       accesstoken: accessToken,
       RefreshToken: refreshToken
