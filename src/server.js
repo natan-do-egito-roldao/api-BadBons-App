@@ -11,7 +11,13 @@ dotenv.config();
 import { jobResetTagDay } from "./jobs/jobResetTags.js";
 import traininLocationRoutes from './routes/oldApi/trainingLocation.js';
 import timetableUnitsRoutes from './routes/oldApi/timetableUnits.js';
+import registreRoute from './routes/oldApi/registre.js';
+import loginRoute from './routes/oldApi/login.js';
+import credentialsRoute from './routes/oldApi/credentials.js';
+import loginTokenRoute from './routes/oldApi/loginToken.js';
+import imgRoute from './routes/oldApi/img.js';
 import mongoose from "mongoose";
+import { login } from './controllers/auth.controller.js';
 
 const permitedVersion = "1.0.1"; 
 
@@ -36,8 +42,15 @@ app.use('/admin', athleteAdminRoutes);
 app.use('/admin/unit', unitAdminRoutes);
 app.use('/user', userRoutes);
 app.use('/unit', unitRoutes);
+
+//loucuras do criador do frontend 
 app.use('/training-locations', traininLocationRoutes)
 app.use('/timetable-units', timetableUnitsRoutes);
+app.use('/registre', registreRoute);
+app.use('/login', loginRoute);
+app.use('/credentials', credentialsRoute);
+app.use('/login-token', loginTokenRoute);
+app.use('/img/:img', imgRoute);
 
 // Teste de rota
 app.get('/ping', (req, res) => {
