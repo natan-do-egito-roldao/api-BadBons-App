@@ -23,7 +23,7 @@ import swapCredentialsRoutes from './routes/oldApi/swapCredentials.js';
 import mongoose from "mongoose";
 import { login } from './controllers/auth.controller.js';
 
-const permitedVersion = "1.0.1"; 
+const permitedVersion = ["1.0.0", "1.0.1"]; 
 
 
 const app = express();
@@ -63,10 +63,10 @@ app.use('/swap-credentials', swapCredentialsRoutes);
 // Teste de rota
 app.get('/ping', (req, res) => {
   const version = req.query.version
-  if (version != permitedVersion) {
-    res.sendStatus(426);
+  if (!permitedVersion.includes(version)) {
+    return res.sendStatus(426);
   }
-  res.sendStatus(200);
+  return res.sendStatus(200);
 });
 
 // Conexão e inicialização
