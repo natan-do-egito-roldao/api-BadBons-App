@@ -16,7 +16,7 @@ import loginRoute from './routes/oldApi/login.js';
 import credentialsRoute from './routes/oldApi/credentials.js';
 import loginTokenRoute from './routes/oldApi/loginToken.js';
 import imgRoute from './routes/oldApi/img.js';
-import imgUserRoutes from './routes/oldApi/imgUSer.js';
+import imgUserRoutes from './routes/oldApi/imgUser.js';
 import swapEmailRoutes from './routes/oldApi/swapEmailRoutes.js';
 import swapPasswordRoutes from './routes/oldApi/swapPassword.js';
 import swapCredentialsRoutes from './routes/oldApi/swapCredentials.js';
