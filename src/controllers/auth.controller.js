@@ -135,13 +135,14 @@ export const login = async (req, res) => {
         {$set: {notificationToken} }
     );
 
-    if ( user.status !== 'active') {
+    const ok = await bcrypt.compare(password, user.password)
+
+    if (!user || !ok) return res.sendStatus(401)
+
+    if ( user.status !== 'active' && ok) {
         return res.sendStatus(401)
     }
     const deviceId = crypto.randomUUID(); 
-
-    const ok = await bcrypt.compare(password, user.password)
-    if (!user || !ok) return res.sendStatus(402)
 
     const accessToken = jwt.sign(
     { sub: user._id, role: user.role, tv: user.tokenVersion },
